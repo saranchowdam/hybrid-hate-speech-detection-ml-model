@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import pickle
+from sklearn.base import BaseEstimator, ClassifierMixin
 import os  # for accessing environment variables
 
 app = Flask(__name__)
