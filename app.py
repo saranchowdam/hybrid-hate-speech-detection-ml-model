@@ -4,6 +4,28 @@ import os  # for accessing environment variables
 
 app = Flask(__name__)
 
+# --------------------------
+# Custom Hybrid Model Class
+# --------------------------
+class HybridModel(BaseEstimator, ClassifierMixin):
+    def __init__(self, model1, model2, model3):
+        self.model1 = model1
+        self.model2 = model2
+        self.model3 = model3
+
+    def fit(self, X, y):
+        self.model1.fit(X, y)
+        self.model2.fit(X, y)
+        self.model3.fit(X, y)
+        return self
+
+    def predict(self, X):
+        pred1 = self.model1.predict(X)
+        pred2 = self.model2.predict(X)
+        pred3 = self.model3.predict(X)
+        final_pred = mode([pred1, pred2, pred3], axis=0)[0].flatten()
+        return final_pred
+
 # Load the model once when the app starts
 with open('hybrid_model.pkl', 'rb') as file:
     model = pickle.load(file)
